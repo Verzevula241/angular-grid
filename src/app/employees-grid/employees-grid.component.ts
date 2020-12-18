@@ -1,73 +1,66 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataBindingDirective } from '@progress/kendo-angular-grid';
-import { process } from '@progress/kendo-data-query';
-import { employees } from './employees';
-import { images } from './images';
+import { products } from './produts';
+import { State, process } from '@progress/kendo-data-query';
+import { GridDataResult } from '@progress/kendo-angular-grid';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 
 @Component({
-  selector: 'app-employees-grid',
-  templateUrl: './employees-grid.component.html',
-  styleUrls: ['./employees-grid.component.scss']
+    selector: 'app-employees-grid',
+    templateUrl: './employees-grid.component.html',
+    styleUrls: ['./employees-grid.component.scss']
 })
 export class EmployeesGridComponent implements OnInit {
-  @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
-  public gridData: any[] = employees;
-  public gridView: any[] = [];
+    public multiple = false;
+    public bindingType: String = 'only2';
+    public allowUnsort = true;
+    public sort: SortDescriptor[] = [
+        {
+            field: 'ProductID',
+            dir: 'asc'
+        }
+    ];
+    public gridState: State = {
+        take: 10
+    };
+    @ViewChild(EmployeesGridComponent) dataBinding: DataBindingDirective;
+    public columns: any[] = [{field: "ProductID"}, {field: "ProductName"}, {field: "UnitPrice"}];
+    public gridData: any[] = products;
+    public gridView: any[] = [];
 
-  public mySelection: string[] = [];
+    constructor() {
+        this.loadProducts();
+    }
+    ngOnInit(): void {
+        throw new Error('Method not implemented.');
+    }
 
-  public ngOnInit(): void {
-      this.gridView = this.gridData;
-  }
+    public sortChange(sort: SortDescriptor[]): void {
+        this.sort = sort;
+        this.loadProducts();
+        console.log()
+    }
 
-  public onFilter(inputValue: string): void {
-      this.gridView = process(this.gridData, {
-          filter: {
-              logic: "or",
-              filters: [
-                  {
-                      field: 'full_name',
-                      operator: 'contains',
-                      value: inputValue
-                  },
-                  {
-                      field: 'job_title',
-                      operator: 'contains',
-                      value: inputValue
-                  },
-                  {
-                      field: 'budget',
-                      operator: 'contains',
-                      value: inputValue
-                  },
-                  {
-                      field: 'phone',
-                      operator: 'contains',
-                      value: inputValue
-                  },
-                  {
-                      field: 'address',
-                      operator: 'contains',
-                      value: inputValue
-                  }
-              ],
+    changeBindingType(e: any) {
+        switch (this.bindingType) {
+          case 'all' : {
+            this.columns = [{field: "ProductID"}, {field: "ProductName"}, {field: "UnitPrice"}];
+            this.gridView = this.gridData
+            break;
           }
-      }).data;
+          case 'only2' : {
+            this.columns = [{field: "ProductID"},{field: "UnitPrice"}];
+            this.gridView = this.gridData
+            break;
+          }
+          case 'only3' : {
+            this.columns = [{field: "ProductID"}];
+            this.gridView = this.gridData
+            break;
+          }
+        }
+      }
 
-      this.dataBinding.skip = 0;
-  }
-
-  private photoURL(dataItem: any): string {
-      const code: string = dataItem.img_id + dataItem.gender;
-      const image: any = images;
-
-      return image[code];
-  }
-
-  private flagURL(dataItem: any): string {
-      const code: string = dataItem.country;
-      const image: any = images;
-
-      return image[code];
-  }
+    private loadProducts(): void {
+        this.gridView = this.gridData
+    }
 }

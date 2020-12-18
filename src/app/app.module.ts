@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesGridComponent } from './employees-grid/employees-grid.component';
@@ -16,14 +16,16 @@ import { RatingComponent } from './rating/rating.component';
   declarations: [
     AppComponent,
     EmployeesGridComponent,
-    RatingComponent
+    RatingComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ButtonsModule,
     BrowserAnimationsModule,
-    GridModule
+    GridModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
