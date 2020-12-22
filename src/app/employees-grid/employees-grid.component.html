@@ -6,16 +6,15 @@
             <fieldset style="margin: 10px">
               <legend>View types</legend>
               <div class="k-form-field">
-                  <span style="padding-right: 10px">View:</span>
-                  <input [(ngModel)]="bindingType" type="radio" name="mode" id="array" value="all" class="k-radio"
-                  (change)="changeBindingType($event)" >
-                  <label class="k-radio-label" for="array">All</label>
-                  <input [(ngModel)]="bindingType" type="radio" name="mode" id="gridDataResult" value="only2" class="k-radio"
-                  (change)="changeBindingType($event)">
-                  <label class="k-radio-label" for="gridDataResult">Only2</label>
-                  <input [(ngModel)]="bindingType" type="radio" name="mode" id="async" value="only3" class="k-radio"
-                  (change)="changeBindingType($event)">
-                  <label class="k-radio-label" for="async">Only3</label>
+              <kendo-dropdownlist
+              [data]="listItems"
+              textField="name"
+              valueField="id"
+              [(ngModel)]="bindingType"
+              (valueChange)="changeBindingType($event)"
+              [valuePrimitive]="true"
+          >
+          </kendo-dropdownlist>
               </div>
             </fieldset>
         </div>
@@ -23,13 +22,17 @@
   </div>
 <kendo-grid
     [data]="gridView"
-    [height]="530"
+    [pageSize]="pageSize"
+    [pageable]="true"
+    [skip]="skip"
+    [reorderable]="true"
     [sortable]="{
         allowUnsort: allowUnsort,
         mode: multiple ? 'multiple' : 'single'
     }"
     [sort]="sort"
     (sortChange)="sortChange($event)"
+    (pageChange)="pageChange($event)"
 >
-    <kendo-grid-column *ngFor="let col of columns" [field]="col.field"></kendo-grid-column>
+    <kendo-grid-column *ngFor="let col of columns" [field]="col?.field"></kendo-grid-column>
 </kendo-grid>

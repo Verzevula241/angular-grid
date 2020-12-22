@@ -1,66 +1,78 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { products } from './produts';
 import { State, process } from '@progress/kendo-data-query';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridDataResult ,PageChangeEvent} from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import {View} from '../interfaces/view.interface'
+import {views} from './views'
 
 @Component({
     selector: 'app-employees-grid',
     templateUrl: './employees-grid.component.html',
     styleUrls: ['./employees-grid.component.scss']
 })
+
 export class EmployeesGridComponent implements OnInit {
     public multiple = false;
-    public bindingType: String = 'only2';
+    public listItems = views
+    public pageSize = 10;
+    public skip = 0;
+    public bindingType: any = sessionStorage.getItem('sessionId')?sessionStorage.getItem('sessionId'): -1
     public allowUnsort = true;
+    public columns: Array<any>;
+    public gridData: any[] = products;
+    public gridView: GridDataResult;
     public sort: SortDescriptor[] = [
         {
             field: 'ProductID',
             dir: 'asc'
         }
     ];
-    public gridState: State = {
-        take: 10
-    };
-    @ViewChild(EmployeesGridComponent) dataBinding: DataBindingDirective;
-    public columns: any[] = [{field: "ProductID"}, {field: "ProductName"}, {field: "UnitPrice"}];
-    public gridData: any[] = products;
-    public gridView: any[] = [];
+  
+
 
     constructor() {
-        this.loadProducts();
+      this.columns = []
+      this.gridView = {data:[],total:0}
     }
-    ngOnInit(): void {
-        throw new Error('Method not implemented.');
+    ngOnInit(): void {;
+      this.loadView(this.bindingType)
     }
 
     public sortChange(sort: SortDescriptor[]): void {
         this.sort = sort;
-        this.loadProducts();
+        this.loadProducts()
         console.log()
     }
+    public pageChange(event: PageChangeEvent): void {
+      this.skip = event.skip;
+      this.loadProducts()
+  }
 
     changeBindingType(e: any) {
-        switch (this.bindingType) {
-          case 'all' : {
-            this.columns = [{field: "ProductID"}, {field: "ProductName"}, {field: "UnitPrice"}];
-            this.gridView = this.gridData
-            break;
-          }
-          case 'only2' : {
-            this.columns = [{field: "ProductID"},{field: "UnitPrice"}];
-            this.gridView = this.gridData
-            break;
-          }
-          case 'only3' : {
-            this.columns = [{field: "ProductID"}];
-            this.gridView = this.gridData
-            break;
-          }
-        }
+        sessionStorage.setItem('sessionId', this.bindingType)
+        this.loadView(this.bindingType)
       }
 
     private loadProducts(): void {
-        this.gridView = this.gridData
+      this.gridView = {
+        data: orderBy(this.gridData.slice(this.skip, this.skip + this.pageSize), this.sort),
+        total: this.gridData.length
+      }
+    }
+    private loadView(item: number): void{
+      let table = views.find(x => x.id === item)
+      if(!table){Error('I was created using a function call!'); return;} //добавить ошибку
+      this.columns = table.column
+      if(this.columns){
+       this.loadProducts()
+      }
+      else{
+        this.gridView = {
+          data: orderBy([{}], this.sort),
+          total: this.gridData.length
+        }
+      }
+      
     }
 }

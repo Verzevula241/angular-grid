@@ -7,7 +7,8 @@ import { EmployeesGridComponent } from './employees-grid/employees-grid.componen
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@progress/kendo-angular-grid';
-import { RatingComponent } from './rating/rating.component';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { LayoutModule } from '@progress/kendo-angular-layout';
 
 
 
@@ -16,7 +17,6 @@ import { RatingComponent } from './rating/rating.component';
   declarations: [
     AppComponent,
     EmployeesGridComponent,
-    RatingComponent,
     
   ],
   imports: [
@@ -25,7 +25,9 @@ import { RatingComponent } from './rating/rating.component';
     ButtonsModule,
     BrowserAnimationsModule,
     GridModule,
-    FormsModule
+    FormsModule,
+    DropDownsModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

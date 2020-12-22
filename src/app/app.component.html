@@ -1,1 +1,17 @@
-<app-employees-grid></app-employees-grid>
+<kendo-tabstrip>
+    <kendo-tabstrip-tab [title]="'Tab 1'">
+      <ng-template kendoTabContent>
+        <app-employees-grid></app-employees-grid>
+      </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab [title]="'Tab 2'" [selected]="true">
+      <ng-template kendoTabContent>
+        <p>Tab 2 Content</p>
+      </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab [title]="'Tab 3'">
+      <ng-template kendoTabContent>
+        <p>Tab 3 Content</p>
+      </ng-template>
+    </kendo-tabstrip-tab>
+  </kendo-tabstrip>
