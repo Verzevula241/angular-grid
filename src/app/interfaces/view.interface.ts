@@ -1,5 +1,8 @@
+import {Column} from './column.interface'
+
 export interface View {
     id: number,
     name: String,
-    column: Array<object> 
+    pageSize: number,
+    column: Array<Column> 
 }

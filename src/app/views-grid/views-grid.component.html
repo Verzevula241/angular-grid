@@ -1,0 +1,15 @@
+<kendo-grid
+    [data]="gridData"
+>
+<ng-template kendoGridToolbarTemplate>
+    <button kendoGridAddCommand type="button">Add new</button>
+    
+</ng-template>
+    <kendo-grid-column *ngFor="let col of column" [field]="col.field!" title =col.title!></kendo-grid-column>
+    <kendo-grid-command-column title="command">
+        <ng-template kendoGridCellTemplate let-isNew="isNew">
+            <button kendoGridEditCommand [primary]="true">Edit</button>
+            <button kendoGridRemoveCommand>Remove</button>
+        </ng-template>
+    </kendo-grid-command-column>
+</kendo-grid>

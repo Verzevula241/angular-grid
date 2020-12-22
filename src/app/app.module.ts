@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { LayoutModule } from '@progress/kendo-angular-layout';
+import { ViewsGridComponent } from './views-grid/views-grid.component';
 
 
 
@@ -17,6 +18,7 @@ import { LayoutModule } from '@progress/kendo-angular-layout';
   declarations: [
     AppComponent,
     EmployeesGridComponent,
+    ViewsGridComponent,
     
   ],
   imports: [

@@ -6,6 +6,11 @@ import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import {View} from '../interfaces/view.interface'
 import {views} from './views'
 
+const getSessionId = ():number=>{
+    const session = sessionStorage.getItem('sessionId')
+    return session === null ? -1 : +session
+}
+
 @Component({
     selector: 'app-employees-grid',
     templateUrl: './employees-grid.component.html',
@@ -17,7 +22,7 @@ export class EmployeesGridComponent implements OnInit {
     public listItems = views
     public pageSize = 10;
     public skip = 0;
-    public bindingType: any = sessionStorage.getItem('sessionId')?sessionStorage.getItem('sessionId'): -1
+    public bindingType: number = getSessionId()
     public allowUnsort = true;
     public columns: Array<any>;
     public gridData: any[] = products;
@@ -39,6 +44,13 @@ export class EmployeesGridComponent implements OnInit {
       this.loadView(this.bindingType)
     }
 
+    private sessionCheack(): any{
+        if(!sessionStorage.getItem('sessionId')){
+          return -1
+        }
+        return sessionStorage.getItem('sessionId')
+    }
+
     public sortChange(sort: SortDescriptor[]): void {
         this.sort = sort;
         this.loadProducts()
@@ -50,7 +62,7 @@ export class EmployeesGridComponent implements OnInit {
   }
 
     changeBindingType(e: any) {
-        sessionStorage.setItem('sessionId', this.bindingType)
+        sessionStorage.setItem('sessionId', `${this.bindingType}`)
         this.loadView(this.bindingType)
       }
 
@@ -61,6 +73,7 @@ export class EmployeesGridComponent implements OnInit {
       }
     }
     private loadView(item: number): void{
+      if (typeof item === 'string'){ item = +item}
       let table = views.find(x => x.id === item)
       if(!table){Error('I was created using a function call!'); return;} //добавить ошибку
       this.columns = table.column
