@@ -15,12 +15,6 @@ export const views: View[] = [
         name: 'all',
         pageSize: 10,
         column: append()
-    },
-    {
-        id: 0,
-        name: 'only2',
-        pageSize: 10,
-        column: [{field: "ProductName", title: 'Product name'}, {field: "ProductID",title: 'Product id'}] 
-    },
+    }
 ]
 

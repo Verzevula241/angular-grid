@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeesGridComponent } from './employees-grid/employees-grid.component';
@@ -10,7 +10,8 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ViewsGridComponent } from './views-grid/views-grid.component';
-
+import { WindowModule } from '@progress/kendo-angular-dialog';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 
 
 
@@ -29,7 +30,10 @@ import { ViewsGridComponent } from './views-grid/views-grid.component';
     GridModule,
     FormsModule,
     DropDownsModule,
-    LayoutModule
+    LayoutModule,
+    WindowModule,
+    InputsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
