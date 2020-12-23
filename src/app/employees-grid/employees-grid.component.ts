@@ -1,14 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { products } from './produts';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { products } from '../data/produts';
 import { State, process } from '@progress/kendo-data-query';
 import { GridDataResult ,PageChangeEvent} from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import {View} from '../interfaces/view.interface'
-import {views} from './views'
+
 
 const getSessionId = ():number=>{
     const session = sessionStorage.getItem('sessionId')
     return session === null ? -1 : +session
+}
+const getLocalViews = (views: View[]):View[] =>{
+  const session = localStorage.getItem('views')
+  const gridViews = session === null ? views : JSON.parse(session)
+  return gridViews 
 }
 
 @Component({
@@ -18,8 +23,11 @@ const getSessionId = ():number=>{
 })
 
 export class EmployeesGridComponent implements OnInit {
+ 
+    @Input() views !: View[]
+    @Input() data !: Array<Object>
     public multiple = false;
-    public listItems = views
+    public boxViews: View[]
     public pageSize = 10;
     public skip = 0;
     public bindingType: number = getSessionId()
@@ -37,18 +45,12 @@ export class EmployeesGridComponent implements OnInit {
 
 
     constructor() {
+      this.boxViews = getLocalViews(this.views)
       this.columns = []
       this.gridView = {data:[],total:0}
     }
     ngOnInit(): void {;
       this.loadView(this.bindingType)
-    }
-
-    private sessionCheack(): any{
-        if(!sessionStorage.getItem('sessionId')){
-          return -1
-        }
-        return sessionStorage.getItem('sessionId')
     }
 
     public sortChange(sort: SortDescriptor[]): void {
@@ -74,9 +76,10 @@ export class EmployeesGridComponent implements OnInit {
     }
     private loadView(item: number): void{
       if (typeof item === 'string'){ item = +item}
-      let table = views.find(x => x.id === item)
-      if(!table){Error('I was created using a function call!'); return;} //добавить ошибку
+      let table = this.boxViews.find(x => x.id === item)
+      if(!table){return} //добавить ошибку
       this.columns = table.column
+      this.pageSize = table.pageSize
       if(this.columns){
        this.loadProducts()
       }
