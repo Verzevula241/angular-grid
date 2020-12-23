@@ -1,15 +1,43 @@
-<kendo-grid
-    [data]="gridData"
->
-<ng-template kendoGridToolbarTemplate>
-    <button kendoGridAddCommand type="button">Add new</button>
-    
-</ng-template>
-    <kendo-grid-column *ngFor="let col of column" [field]="col.field!" title =col.title!></kendo-grid-column>
-    <kendo-grid-command-column title="command">
+<kendo-grid [data]="gridView">
+    <ng-template kendoGridToolbarTemplate>
+        <button kendoGridAddCommand type="button" (click)="open()">Add new</button>
+        <!-- <button kendoButton (click)="open()">Open window</button> -->
+
+    </ng-template>
+    <kendo-grid-column *ngFor="let col of column" [field]="col.field!" [title]="col.title!"></kendo-grid-column>
+    <kendo-grid-command-column title="Command">
         <ng-template kendoGridCellTemplate let-isNew="isNew">
             <button kendoGridEditCommand [primary]="true">Edit</button>
             <button kendoGridRemoveCommand>Remove</button>
         </ng-template>
     </kendo-grid-command-column>
 </kendo-grid>
+<div class="k-overlay" *ngIf="opened"></div>
+<div class="example-wrapper">
+    <kendo-window title="Please provide additional data" *ngIf="opened" (close)="open()" [minWidth]="250" [width]="450">
+        <kendo-window-titlebar>
+            <button kendoWindowCloseAction></button>
+        </kendo-window-titlebar>
+        <form class="k-form" [formGroup]="form" >
+            <fieldset>
+                <legend>User Details</legend>
+
+                <label class="k-form-field">
+                    <input kendoTextBox class="k-textbox" [formControlName]="'name'" placeholder="View name" />
+                </label>
+                
+                <label class="k-form-field">
+                    <kendo-numerictextbox   [formControlName]="'pageSize'"  placeholder="Page size" [format]="'#'" [min]="1" [max]="50" round = true [autoCorrect]=false>
+                    </kendo-numerictextbox>
+                </label>
+                <label class="k-form-field">
+                    <kendo-multiselect  [formControlName]="'column'" placeholder="Select Fields" [data]="productColumns" valueField=field textField=title ></kendo-multiselect>
+                </label>
+            </fieldset>
+
+            <div class="text-right">
+                <button class="k-button k-primary" (click)="submitForm()">Create view</button>
+            </div>
+        </form>
+    </kendo-window>
+</div>
