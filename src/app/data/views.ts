@@ -1,13 +1,21 @@
 import { View } from '../interfaces/view.interface';
 import { products } from './produts';
-import {Column} from '../interfaces/column.interface'
+import { Column } from '../interfaces/column.interface'
 
 
-let append = () =>{
+let append = () => {
     let all: Array<Column> = []
-    Object.keys(products[0]).forEach(x => all.push({field: x, title: x}))
+    Object.keys(products[0]).forEach(x =>
+        all.push(
+            {
+                field: x,
+                title: x,
+                locked: false,
+                hidden: false
+
+            }))
     return all
-} 
+}
 
 export const views: View[] = [
     {
