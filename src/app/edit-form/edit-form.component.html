@@ -1,0 +1,47 @@
+<kendo-dialog  [height]="450" (close)="closeForm()">
+    <kendo-dialog-titlebar>
+        {{ isNew ? 'Add new product' : 'Edit product' }}
+    </kendo-dialog-titlebar>
+
+    <form novalidate class="k-form" [formGroup]="editForm">
+        <!-- <kendo-formfield>
+            <input formControlName="name" kendoTextBox #ColumnField required />
+
+            <kendo-formhint>Type product name</kendo-formhint>
+            <kendo-formerror>Error: Product name is required</kendo-formerror>
+        </kendo-formfield>
+
+        <kendo-formfield>
+            <kendo-numerictextbox formControlName="ColumnTitle" #UnitPrice required > </kendo-numerictextbox>
+
+            <kendo-formhint>Type unit price</kendo-formhint>
+            <kendo-formerror>Error: Unit price is required</kendo-formerror>
+        </kendo-formfield>
+
+        <kendo-formfield>
+            <kendo-numerictextbox  > </kendo-numerictextbox>
+            <input type="checkbox" formControlName="ColumnLock" #ColumnLock required kendoCheckBox />
+            <kendo-formhint>Type units</kendo-formhint>
+            <kendo-formerror>Error: Units must be between 0 and 999</kendo-formerror>
+        </kendo-formfield>
+
+        <kendo-formfield>
+            <div class="k-inline-checkbox" >
+                <input formControlName="Discontinued" kendoCheckBox #Discontinued type="checkbox" />
+            </div>
+        </kendo-formfield> -->
+        <kendo-grid [data]="gridData">
+            <kendo-grid-column *ngFor="let col of Columns" [field]="col"></kendo-grid-column>
+            <kendo-grid-command-column title="Edit">
+                <ng-template kendoGridCellTemplate let-isNew="isNew">
+                    <button kendoGridEditCommand [primary]="true">Edit</button>
+                </ng-template>
+            </kendo-grid-command-column>
+        </kendo-grid>
+    </form>
+
+    <kendo-dialog-actions>
+        <button class="k-button" (click)="onCancel($event)">Cancel</button>
+        <button class="k-button k-primary" [disabled]="!editForm.valid" (click)="onSave($event)">Save</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
