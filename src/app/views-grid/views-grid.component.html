@@ -1,14 +1,13 @@
-<kendo-grid [data]="gridView">
+<kendo-grid [data]="gridView" [reorderable]="true" (edit)="editHandler($event)">
     <ng-template kendoGridToolbarTemplate>
         <button kendoGridAddCommand type="button" (click)="open()">Add new</button>
         <!-- <button kendoButton (click)="open()">Open window</button> -->
 
     </ng-template>
     <kendo-grid-column *ngFor="let col of column" [field]="col.field!" [title]="col.title!"></kendo-grid-column>
-    <kendo-grid-command-column title="Command">
+    <kendo-grid-command-column title="Columns">
         <ng-template kendoGridCellTemplate let-isNew="isNew">
             <button kendoGridEditCommand [primary]="true">Edit</button>
-            <button kendoGridRemoveCommand>Remove</button>
         </ng-template>
     </kendo-grid-command-column>
 </kendo-grid>
@@ -40,4 +39,7 @@
             </div>
         </form>
     </kendo-window>
+    <app-edit-form [model]="editDataItem" [isNew]="isNew" *ngIf="activeEdit"
+          (cancel)="cancelHandler()">
+      </app-edit-form>
 </div>

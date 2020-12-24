@@ -34,5 +34,5 @@
     (sortChange)="sortChange($event)"
     (pageChange)="pageChange($event)"
 >
-    <kendo-grid-column *ngFor="let col of columns" [field]="col?.field"></kendo-grid-column>
+    <kendo-grid-column *ngFor="let col of columns" [field]="col.field" [title] = "col.title" [hidden]="col.hidden||false"></kendo-grid-column>
 </kendo-grid>

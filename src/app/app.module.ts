@@ -12,6 +12,8 @@ import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ViewsGridComponent } from './views-grid/views-grid.component';
 import { WindowModule } from '@progress/kendo-angular-dialog';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { EditFormComponent } from './edit-form/edit-form.component';
+import { DialogModule } from '@progress/kendo-angular-dialog';
 
 
 
@@ -20,6 +22,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
     AppComponent,
     EmployeesGridComponent,
     ViewsGridComponent,
+    EditFormComponent,
     
   ],
   imports: [
@@ -33,7 +36,8 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
     LayoutModule,
     WindowModule,
     InputsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
