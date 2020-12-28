@@ -5,16 +5,12 @@ import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { View } from '../../interfaces/view.interface'
 import { Column } from '../../interfaces/column.interface';
+import { EditService } from 'src/app/service/editView.service';
 
 
 const getSessionId = (): number => {
   const session = sessionStorage.getItem('sessionId')
   return session === null ? -1 : +session
-}
-const getLocalViews = (views: View[]): View[] => {
-  const session = localStorage.getItem('views')
-  const gridViews = session === null ? views : JSON.parse(session)
-  return gridViews
 }
 
 @Component({
@@ -27,10 +23,11 @@ export class EmployeesGridComponent implements OnInit {
 
 
   @Input() public set views(product: View[]) {
-    this.boxViews = getLocalViews(product)
+    this.boxViews = this.editService.getLocalViews(product)
   }
 
   @Input() data !: Array<Object>
+  private editService: EditService = new EditService;
   public multiple = false;
   public boxViews: View[] = []
   public pageSize = 10;
@@ -54,7 +51,7 @@ export class EmployeesGridComponent implements OnInit {
     this.gridView = { data: [], total: 0 }
   }
   ngOnInit(): void {
-    ;
+    this.editService.read();
     this.loadView(this.bindingType)
   }
 
@@ -81,8 +78,7 @@ export class EmployeesGridComponent implements OnInit {
   }
   private loadView(item: number): void {
     if (typeof item === 'string') { item = +item }
-    let table = this.boxViews.find(x => x.id === item)
-    console.log()
+    let table = this.boxViews.find(x => x.id === item);
     if (!table || table === undefined) { return this.loadView(-1) } //добавить ошибку
     this.columns = table.column
     this.pageSize = table.pageSize

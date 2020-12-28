@@ -94,7 +94,9 @@ private closeEditor(grid:GridComponent, rowIndex = this.editedRowIndex) {
   this.editedRowIndex = undefined;
   this.editColumn = undefined;
 }
-
+public cancelHandler(e: EditEvent) {
+  this.closeEditor(e.sender, e.rowIndex);
+}
   public closeForm(): void {
       this.cancel.emit();
   }

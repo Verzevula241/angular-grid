@@ -1,4 +1,4 @@
-<kendo-grid [data]="gridView" [reorderable]="true" (edit)="editHandler($event)">
+<kendo-grid [data]="gridView" [reorderable]="true" (edit)="editHandler($event)" (remove)="removeHandler($event)">
     <ng-template kendoGridToolbarTemplate>
         <button kendoGridAddCommand type="button" (click)="open()">Add new</button>
 
@@ -7,6 +7,7 @@
     <kendo-grid-command-column title="Columns">
         <ng-template kendoGridCellTemplate let-isNew="isNew">
             <button kendoGridEditCommand [primary]="true">Edit</button>
+            <button kendoGridRemoveCommand>Remove</button>
         </ng-template>
     </kendo-grid-command-column>
 </kendo-grid>
@@ -25,7 +26,7 @@
                 </label>
                 
                 <label class="k-form-field">
-                    <kendo-numerictextbox   [formControlName]="'pageSize'"  placeholder="Page size" [format]="'#'" [min]="1" [max]="50" round = true [autoCorrect]=false>
+                    <kendo-numerictextbox   [formControlName]="'pageSize'"  placeholder="Page size" [format]="'#'" [min]="1" [max]="20" round = true [autoCorrect]=false>
                     </kendo-numerictextbox>
                 </label>
                 <label class="k-form-field">

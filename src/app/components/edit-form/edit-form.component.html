@@ -32,6 +32,7 @@
             [pageable]="true" [sortable]="true"
             (edit)="editHandler($event)" 
             (save)="saveHandler($event)" 
+            (cancel)="cancelHandler($event)"
             [navigable]="true"
           >
           <ng-template kendoGridToolbarTemplate>
@@ -50,15 +51,24 @@
                 <input [(ngModel)]="dataItem.hidden" kendoGridFocusable name="hidden" type="checkbox"/>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-column field="locked" editor="boolean" title="locked">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem">
+                <input [(ngModel)]="dataItem.locked" kendoGridFocusable name="locked" type="checkbox"/>
+            </ng-template>
+        </kendo-grid-column>
           <kendo-grid-column field="width" editor="numeric" title="width">
               <ng-template kendoGridEditTemplate let-dataItem="dataItem">
                   <input [(ngModel)]="dataItem.width" kendoGridFocusable name="width" class="k-textbox" type="number"/>
               </ng-template>
           </kendo-grid-column>
-          <kendo-grid-command-column title="command">
-              <ng-template kendoGridCellTemplate let-isNew="isNew">
+          <kendo-grid-column field="order" editor="numeric" title="order">
+            <ng-template kendoGridEditTemplate let-dataItem="dataItem">
+                <input [(ngModel)]="dataItem.order" kendoGridFocusable name="order" class="k-textbox" type="number"/>
+            </ng-template>
+        </kendo-grid-column>
+          <kendo-grid-command-column title="command" [width]="100">
+              <ng-template kendoGridCellTemplate let-isNew="isNew" style="text-align: center;">
                   <button kendoGridEditCommand type="button" [primary]="true">Edit</button>
-                  <button kendoGridRemoveCommand type="button">Remove</button>
                   <button
   kendoGridSaveCommand type="button">Update</button>
                   <button kendoGridCancelCommand type="button">{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
@@ -69,6 +79,5 @@
 
     <kendo-dialog-actions>
         <button class="k-button" (click)="onCancel($event)">Cancel</button>
-        <!-- <button class="k-button k-primary" [disabled]="!editForm.valid" (click)="onSave($event)">Save</button> -->
     </kendo-dialog-actions>
 </kendo-dialog>

@@ -25,7 +25,6 @@
     [pageSize]="pageSize"
     [pageable]="true"
     [skip]="skip"
-    [reorderable]="true"
     [sortable]="{
         allowUnsort: allowUnsort,
         mode: multiple ? 'multiple' : 'single'
@@ -34,5 +33,5 @@
     (sortChange)="sortChange($event)"
     (pageChange)="pageChange($event)"
 >
-    <kendo-grid-column *ngFor="let col of columns" [field]="col.field" [title] = "col.title" [hidden]="col.hidden||false"></kendo-grid-column>
+    <kendo-grid-column *ngFor="let col of columns" [field]="col.field" [title] = "col.title" [hidden]="col.hidden||false" [locked]="col.locked||false" [width]="col.width||200"></kendo-grid-column>
 </kendo-grid>

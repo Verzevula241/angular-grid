@@ -3,15 +3,11 @@ import { Column } from '../../interfaces/column.interface';
 import { View } from '../../interfaces/view.interface';
 import { productColumns } from '../../data/product.columns'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { views } from '../../data/views';
 import { EditEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { products } from '../../data/produts';
+import { EditService } from 'src/app/service/editView.service';
 
-const getLocalViews = (views: View[]):View[] =>{
-  const session = localStorage.getItem('views')
-  const gridViews = session === null ? views : JSON.parse(session)
-  return gridViews 
-}
+
 const setDefaulValue = (product: Array<Column>):Column[] =>{
   let endCol: Column[] =[]
   product.forEach((item,index)=>{
@@ -33,8 +29,16 @@ const setId = function ():number {
   styleUrls: ['./views-grid.component.scss']
 })
 export class ViewsGridComponent implements OnInit {
-  @Input() views !: View[]
-  public gridView: GridDataResult;
+
+  @Input() public set views(data: View[]) {
+    //   this.editForm.reset(column);
+    this.view = data;
+
+  }
+
+  private view: View[] = []
+  private editService: EditService = new EditService;
+  public gridView: GridDataResult = {data:[],total:0};
   public activeEdit:boolean = false
   public column: Array<Column>
   public editDataItem: View = {
@@ -57,7 +61,7 @@ export class ViewsGridComponent implements OnInit {
 
   constructor() {
 
-    this.gridView = {data: getLocalViews(views),total:0}
+    // this.gridView = {data: getLocalViews(this.views),total:0}
     this.column = [{ field: 'id', title: 'View id' },{ field: 'name', title: 'View Name' }, { field: 'pageSize', title: 'Page size' }]
     // this.productColumns = productColumns
     this.prodColumns = productColumns
@@ -87,12 +91,17 @@ export class ViewsGridComponent implements OnInit {
   this.activeEdit = true
   this.isNew = false;
 }
-
+public removeHandler(e: EditEvent) {
+  this.editService.remove(e.dataItem);
+  this.form.reset();
+}
 public cancelHandler() {
   this.activeEdit = false
 }
 
   ngOnInit(): void {
+    this.editService.read();
+    this.gridView = {data: this.editService.getLocalViews(this.view),total:0}
   }
 
 }
