@@ -33,12 +33,22 @@ export class EditService extends BehaviorSubject<any[]>{
     }
 
     public getLocalViews(views: View[]): View[] {
-        const session = localStorage.getItem('views')
-        const gridViews = session === null ? views : JSON.parse(session)
-        return gridViews
+            const session = localStorage.getItem('views')
+            if(!session){
+              const gridViews = views
+              localStorage.setItem('views',JSON.stringify(gridViews))
+              return gridViews 
+            }
+            else return JSON.parse(session)
       }
 
-    
+    public remove(data: any){
+        let updatedItems: View[] = []
+        this.data.map((el,index) => el.id === data.id ? this.data.splice(index,1) : el)
+        updatedItems = this.data
+        updatedItems.length === 0 ? localStorage.removeItem('views'):localStorage.setItem('views',JSON.stringify(updatedItems))
+        
+    }
     private reset() {
         this.data = [];
     }
