@@ -5,13 +5,14 @@ import { Column } from '../interfaces/column.interface'
 
 let append = () => {
     let all: Array<Column> = []
-    Object.keys(products[0]).forEach(x =>
+    Object.keys(products[0]).forEach((x,index) =>
         all.push(
             {
                 field: x,
                 title: x,
                 locked: false,
-                hidden: false
+                hidden: false,
+                order: index
 
             }))
     return all
