@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
-import { Column } from '../interfaces/column.interface';
-import { View } from '../interfaces/view.interface';
-import { productColumns } from '../data/product.columns'
+import { Column } from '../../interfaces/column.interface';
+import { View } from '../../interfaces/view.interface';
+import { productColumns } from '../../data/product.columns'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { views } from '../data/views';
+import { views } from '../../data/views';
 import { EditEvent, GridDataResult } from '@progress/kendo-angular-grid';
-import { products } from '../data/produts';
+import { products } from '../../data/produts';
 
 const getLocalViews = (views: View[]):View[] =>{
   const session = localStorage.getItem('views')
@@ -41,9 +41,9 @@ export class ViewsGridComponent implements OnInit {
     id: 0,
     name: '',
     pageSize: 0,
-    column: [{ field: "ProductName", title: 'Product name' }]
+    column: []
   };
-  public productColumns: Array<Column>
+  public prodColumns: Array<Column>
   public opened: boolean = false
   public isNew: boolean = false;
   public selectedValue: Array<Column> = [{ field: "ProductName", title: 'Product name' }, { field: "ProductID", title: 'Product id' }]
@@ -52,7 +52,7 @@ export class ViewsGridComponent implements OnInit {
     id: 0,
     name: '',
     pageSize: 0,
-    column: [{ field: "ProductName", title: 'Product name' }]
+    column: []
   };
 
   constructor() {
@@ -60,7 +60,7 @@ export class ViewsGridComponent implements OnInit {
     this.gridView = {data: getLocalViews(views),total:0}
     this.column = [{ field: 'id', title: 'View id' },{ field: 'name', title: 'View Name' }, { field: 'pageSize', title: 'Page size' }]
     // this.productColumns = productColumns
-    this.productColumns = productColumns
+    this.prodColumns = productColumns
     this.form = new FormGroup({
       name: new FormControl(this.data.name, [Validators.required]),
       pageSize: new FormControl(this.data.pageSize, [Validators.required]),

@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { products } from '../data/produts';
+import { products } from '../../data/produts';
 import { State, process } from '@progress/kendo-data-query';
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
-import { View } from '../interfaces/view.interface'
-import { Column } from '../interfaces/column.interface';
+import { View } from '../../interfaces/view.interface'
+import { Column } from '../../interfaces/column.interface';
 
 
 const getSessionId = (): number => {

@@ -1,7 +1,6 @@
 <kendo-grid [data]="gridView" [reorderable]="true" (edit)="editHandler($event)">
     <ng-template kendoGridToolbarTemplate>
         <button kendoGridAddCommand type="button" (click)="open()">Add new</button>
-        <!-- <button kendoButton (click)="open()">Open window</button> -->
 
     </ng-template>
     <kendo-grid-column *ngFor="let col of column" [field]="col.field!" [title]="col.title!"></kendo-grid-column>
@@ -30,7 +29,7 @@
                     </kendo-numerictextbox>
                 </label>
                 <label class="k-form-field">
-                    <kendo-multiselect  [formControlName]="'column'" placeholder="Select Fields" [data]="productColumns" valueField=field textField=title ></kendo-multiselect>
+                    <kendo-multiselect  [formControlName]="'column'" placeholder="Select Fields" [data]="prodColumns" valueField=field textField=title ></kendo-multiselect>
                 </label>
             </fieldset>
 
