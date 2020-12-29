@@ -2,31 +2,7 @@
     <kendo-dialog-titlebar>
         {{ isNew ? 'Add new product' : 'Edit product' }}
     </kendo-dialog-titlebar>
-
-    <!-- <form novalidate class="k-form" [formGroup]="editForm" #myForm="ngForm">
-        
-        <kendo-grid [data]="gridData" (edit)="editHandler($event)" (save)="saveHandler($event)">
-            <kendo-grid-column field="field"></kendo-grid-column>
-            <kendo-grid-column field="title" title="Product Name">
-                <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                    <input [(ngModel)]="dataItem.title" kendoGridFocusable name="title" class="k-textbox" required/>
-                </ng-template>
-            </kendo-grid-column>
-            <kendo-grid-column field="locked" editor = "boolean"></kendo-grid-column>
-            <kendo-grid-column field="hidden" editor = "boolean"></kendo-grid-column>
-            <kendo-grid-column field="width" editor = "numeric"></kendo-grid-column>
-
-            <kendo-grid-command-column title="Edit">
-                <ng-template kendoGridCellTemplate let-isNew="isNew">
-                    <button kendoGridEditCommand [primary]="true">Edit</button>
-                    <button
-                    kendoGridSaveCommand type="button"
-                    [disabled]="false">{{ isNew ? 'Add' : 'Update' }}</button>
-                </ng-template>
-            </kendo-grid-command-column>
-        </kendo-grid>
-    </form> -->
-    <form novalidate #myForm="ngForm">
+    <form novalidate #myForm="ngForm" [formGroup]="form">
         <kendo-grid
             [data]="gridData"
             [pageable]="true" [sortable]="true"
@@ -43,34 +19,45 @@
         </kendo-grid-column>
           <kendo-grid-column field="title" title="title">
               <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                  <input [(ngModel)]="dataItem.title" kendoGridFocusable name="field" class="k-textbox" required/>
+                  <input  kendoGridFocusable formControlName="title" name="title" class="k-textbox" required/>
+                  <div class="alert  alert-danger" *ngIf="form.get('title')?.dirty && form.get('title')?.errors ">
+                    Age
+                </div>
               </ng-template>
           </kendo-grid-column>
           <kendo-grid-column field="hidden" editor="boolean" title="hidden">
             <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                <input [(ngModel)]="dataItem.hidden" kendoGridFocusable name="hidden" type="checkbox"/>
+                <!-- <input [(ngModel)]="dataItem.hidden" formControlName="hidden" kendoGridFocusable name="hidden" type="checkbox"/> -->
+                <input formControlName="hidden" kendoGridFocusable name="hidden" type="checkbox" [(ngModel)]="hiddenCheck"/>
+                <div class="alert  alert-danger" *ngIf="hiddenCheck">
+                    Age should be in between 20 to 500 years
+                </div>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="locked" editor="boolean" title="locked">
             <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                <input [(ngModel)]="dataItem.locked" kendoGridFocusable name="locked" type="checkbox"/>
+                <!-- <input [(ngModel)]="dataItem.locked" formControlName="locked" kendoGridFocusable name="locked" type="checkbox"/> -->
+                <input formControlName="locked" kendoGridFocusable name="locked" type="checkbox" [(ngModel)]="lockedCheck"/>
             </ng-template>
         </kendo-grid-column>
           <kendo-grid-column field="width" editor="numeric" title="width">
               <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                  <input [(ngModel)]="dataItem.width" kendoGridFocusable name="width" class="k-textbox" type="number"/>
+                  <!-- <input [(ngModel)]="dataItem.width"  formControlName="width" kendoGridFocusable name="width" class="k-textbox" type="number"/> -->
+                  <input  formControlName="width" kendoGridFocusable name="width" class="k-textbox" type="number"/>
+                  <div class="alert  alert-danger" *ngIf="form.get('width')?.dirty && form.get('width')?.errors&& form.get('width')?.errors?.ageRange ">
+                    Age should be in between 20 to 500 years
+                </div>
               </ng-template>
           </kendo-grid-column>
           <kendo-grid-column field="order" editor="numeric" title="order">
             <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                <input [(ngModel)]="dataItem.order" kendoGridFocusable name="order" class="k-textbox" type="number"/>
+                <!-- <input [(ngModel)]="dataItem.order" kendoGridFocusable name="order" class="k-textbox" type="number"/> -->
             </ng-template>
         </kendo-grid-column>
-          <kendo-grid-command-column title="command" [width]="100">
+          <kendo-grid-command-column title="command" [width]="150">
               <ng-template kendoGridCellTemplate let-isNew="isNew" style="text-align: center;">
                   <button kendoGridEditCommand type="button" [primary]="true">Edit</button>
-                  <button
-  kendoGridSaveCommand type="button">Update</button>
+                  <button kendoGridSaveCommand type="button" [disabled]="form?.invalid" >Update</button>
                   <button kendoGridCancelCommand type="button">{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
               </ng-template>
           </kendo-grid-command-column>

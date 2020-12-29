@@ -35,7 +35,7 @@
             </fieldset>
 
             <div class="text-right">
-                <button class="k-button k-primary" (click)="submitForm()">Create view</button>
+                <button class="k-button k-primary" [disabled]="!form.valid" (click)="submitForm()">Create view</button>
             </div>
         </form>
     </kendo-window>
