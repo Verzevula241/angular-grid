@@ -22,7 +22,14 @@ function hiddenValidator(hidden: boolean): ValidatorFn {
       return { 'hiddenValue': true };
   };
 }
-
+function comparisonValidator(g: FormGroup): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (g.get('hidden')!.value == true && g.get('locked')!.value == true) { 
+        return { 'hiddenValue': true };
+    }
+    return null;
+};
+}  
 
 @Component({
   selector: 'app-edit-form',
@@ -34,8 +41,8 @@ export class EditFormComponent implements OnInit {
 
     private editService: EditService = new EditService;
     public gridData: Array<Column> = []
-    public hiddenCheck:boolean
-    public lockedCheck:boolean
+    public hiddenCheck:boolean = false
+    public lockedCheck:boolean = false
     public view: object = {}
     public form: FormGroup = new FormGroup({});
     public editColumn: Column|undefined = {
@@ -63,18 +70,13 @@ export class EditFormComponent implements OnInit {
     this.editService.read();
     this.form= new FormGroup({
       title: new FormControl('', [Validators.required]),
-      hidden: new FormControl(this.hiddenCheck, [hiddenValidator(this.lockedCheck)]),
+      hidden: new FormControl(this.hiddenCheck),
       locked: new FormControl(this.lockedCheck),
       width: new FormControl(0,[Validators.required,ageRangeValidator(20, 500)]),
   });
-  }
-  // public editForm: FormGroup = new FormGroup({
-  //     name: new FormControl(''),
-  //     title: new FormControl('', Validators.required),
-  //     UnitPrice: new FormControl(0),
-  //     UnitsInStock: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[0-9]{1,3}')])),
-  //     Discontinued: new FormControl(false)
-  // });
+  this.form.validator = comparisonValidator(this.form);
+  
+ }
   
 
   @Input() public isNew = false;
