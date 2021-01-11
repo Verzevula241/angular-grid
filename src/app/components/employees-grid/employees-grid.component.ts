@@ -79,7 +79,10 @@ export class EmployeesGridComponent implements OnInit {
   private loadView(item: number): void {
     if (typeof item === 'string') { item = +item }
     let table = this.boxViews.find(x => x.id === item);
-    if (!table || table === undefined) { return this.loadView(-1) } //добавить ошибку
+    if (!table || table === undefined) { 
+      this.bindingType = -1
+      return this.loadView(this.bindingType) 
+    } //добавить ошибку
     this.columns = table.column
     this.pageSize = table.pageSize
     if (this.columns) {

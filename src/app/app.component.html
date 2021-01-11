@@ -1,10 +1,10 @@
 <kendo-tabstrip>
-    <kendo-tabstrip-tab [title]="'Tab 1'" [selected]="true">
+    <kendo-tabstrip-tab [title]="'Data'" [selected]="true">
       <ng-template kendoTabContent>
         <app-employees-grid [views] = 'views' [data] = 'products'></app-employees-grid>
       </ng-template>
     </kendo-tabstrip-tab>
-    <kendo-tabstrip-tab [title]="'Tab 2'" >
+    <kendo-tabstrip-tab [title]="'Views'" >
       <ng-template kendoTabContent>
         <app-views-grid [views] = 'views'></app-views-grid>
       </ng-template>

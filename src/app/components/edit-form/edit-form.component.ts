@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { EditEvent, GridComponent } from '@progress/kendo-angular-grid';
+import { EditEvent, GridComponent, SaveEvent } from '@progress/kendo-angular-grid';
 import { EditService } from 'src/app/service/editView.service';
 import { Column } from '../../interfaces/column.interface';
 import { View } from '../../interfaces/view.interface';
@@ -14,18 +14,11 @@ function ageRangeValidator(min: number, max: number): ValidatorFn {
       return null;
   };
 }
-function hiddenValidator(hidden: boolean): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-      if (control.value === hidden) {
-        return null;
-      }
-      return { 'hiddenValue': true };
-  };
-}
+
 function comparisonValidator(g: FormGroup): ValidatorFn {
   return (control: AbstractControl): { [key: string]: boolean } | null => {
     if (g.get('hidden')!.value == true && g.get('locked')!.value == true) { 
-        return { 'hiddenValue': true };
+        return { 'hiddenValue': false };
     }
     return null;
 };
@@ -41,8 +34,6 @@ export class EditFormComponent implements OnInit {
 
     private editService: EditService = new EditService;
     public gridData: Array<Column> = []
-    public hiddenCheck:boolean = false
-    public lockedCheck:boolean = false
     public view: object = {}
     public form: FormGroup = new FormGroup({});
     public editColumn: Column|undefined = {
@@ -58,23 +49,18 @@ export class EditFormComponent implements OnInit {
 
 
   constructor() { 
-    this.form= new FormGroup({
-      title: new FormControl(),
-      hidden: new FormControl(),
-      locked: new FormControl(),
-      width: new FormControl(),
-  });
+    
   }
 
   ngOnInit(): void {
     this.editService.read();
-    this.form= new FormGroup({
-      title: new FormControl('', [Validators.required]),
-      hidden: new FormControl(this.hiddenCheck),
-      locked: new FormControl(this.lockedCheck),
-      width: new FormControl(0,[Validators.required,ageRangeValidator(20, 500)]),
-  });
-  this.form.validator = comparisonValidator(this.form);
+  //   this.form= new FormGroup({
+  //     title: new FormControl('', [Validators.required]),
+  //     hidden: new FormControl(this.hiddenCheck),
+  //     locked: new FormControl(this.lockedCheck),
+  //     width: new FormControl([Validators.required,ageRangeValidator(20, 500)]),
+  // });
+  // this.form.validator = comparisonValidator(this.form);
   
  }
   
@@ -82,7 +68,6 @@ export class EditFormComponent implements OnInit {
   @Input() public isNew = false;
 
   @Input() public set model(data: View) {
-    //   this.editForm.reset(column);
     this.gridData = data.column;
     this.view = data;
 
@@ -106,20 +91,22 @@ export class EditFormComponent implements OnInit {
     this.closeEditor(e.sender);
     this.editedRowIndex = e.rowIndex;
     this.editColumn = Object.assign({}, e.dataItem);
-  //   this.form= new FormGroup({
-  //     title: new FormControl(e.dataItem.title, [Validators.required]),
-  //     hidden: new FormControl(e.dataItem.hidden, [hiddenValidator(this.lockedCheck)]),
-  //     locked: new FormControl(e.dataItem.locked),
-  //     width: new FormControl(e.dataItem.width,[Validators.required,ageRangeValidator(20, 500)]),
-  // });
-
+    this.form= new FormGroup({
+      title: new FormControl(e.dataItem.title, [Validators.required]),
+      hidden: new FormControl(e.dataItem.hidden),
+      locked: new FormControl(e.dataItem.locked),
+      width: new FormControl(e.dataItem.width,[Validators.required,ageRangeValidator(0, 500)]),
+  });
+  this.form.validator = comparisonValidator(this.form);
     e.sender.editRow(e.rowIndex,this.form);
 }
 
- public saveHandler(e:EditEvent) {
+ public saveHandler(e:SaveEvent) {
         let copy : View = Object.assign({id:0,name:'',pageSize:0,column:[]},this.view)
         copy.column.map((obj,index) => {if(obj.field === e.dataItem.field) {
-          copy.column[index] = e.dataItem;
+          let Col: Column = Object.assign({field: e.dataItem.field,order: index},e.formGroup.value)
+
+          copy.column[index] = Col;
       }else obj});
         this.editService.save(copy, e.isNew);
 
