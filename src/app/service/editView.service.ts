@@ -1,5 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import { views } from "../data/views";
+import { Column } from "../interfaces/column.interface";
 import { View } from "../interfaces/view.interface";
 
 const CREATE_ACTION = 'create';
@@ -49,12 +50,53 @@ export class EditService extends BehaviorSubject<any[]>{
         updatedItems.length === 0 ? localStorage.removeItem('views'):localStorage.setItem('views',JSON.stringify(updatedItems))
         
     }
-    private reset() {
-        this.data = [];
+
+    public replaceOrder(data: Array<Column>): Array<Column>{
+
+         data.forEach((item,index,array)=> {
+            if(item.order !== undefined){
+               return  array =  this.array_move(array,index,item.order)
+            }
+            return array
+            
+        });
+
+        return data
+
+    }
+    public upOrder(arr: Array<Column>, old_index:number,){
+        if (old_index >= arr.length) {
+            return arr
+         }
+         arr.splice(old_index-1, 0, arr.splice(old_index, 1)[0]);
+         arr[old_index-1].order = old_index-1
+         arr[old_index].order = old_index
+         return arr;
+    }
+    public downOrder(arr: Array<Column>, old_index:number,){
+        if (old_index >= arr.length) {
+            return arr
+         }
+         arr.splice(old_index+1, 0, arr.splice(old_index, 1)[0]);
+         arr[old_index+1].order = old_index+1
+         arr[old_index].order = old_index
+         return arr;
     }
 
+    private array_move(arr: Array<Column>, old_index:number, new_index:number) {
+        if (new_index >= arr.length) {
+           return arr
+        }
+        arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+        return arr;
+    };
+
+    // private reset() {
+    //     this.data = [];
+    // }
+
     
-    private serializeModels(data?: any): string {
-        return data ? `&models=${JSON.stringify([data])}` : '';
-    }
+    // private serializeModels(data?: any): string {
+    //     return data ? `&models=${JSON.stringify([data])}` : '';
+    // }
 }

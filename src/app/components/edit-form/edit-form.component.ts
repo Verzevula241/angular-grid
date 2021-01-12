@@ -68,7 +68,7 @@ export class EditFormComponent implements OnInit {
   @Input() public isNew = false;
 
   @Input() public set model(data: View) {
-    this.gridData = data.column;
+    this.gridData = this.editService.replaceOrder(data.column);
     this.view = data;
 
   }
@@ -116,6 +116,18 @@ export class EditFormComponent implements OnInit {
         this.editColumn = undefined;
     }
 
+    public upHandler(e:Column) {
+      if(e.order !== undefined){
+        this.gridData = this.editService.upOrder(this.gridData,e.order)
+        this.editService.save(this.view, this.isNew);
+      } 
+  }
+  public downHandler(e:Column) {
+    if(e.order !== undefined){
+      this.gridData = this.editService.downOrder(this.gridData,e.order)
+      this.editService.save(this.view, this.isNew);
+    } 
+}
 private closeEditor(grid:GridComponent, rowIndex = this.editedRowIndex) {
   grid.closeRow(rowIndex);
   //this.editService.resetItem(this.editColumn);

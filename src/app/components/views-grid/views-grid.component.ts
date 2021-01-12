@@ -49,7 +49,6 @@ export class ViewsGridComponent implements OnInit {
   public prodColumns: Array<Column>
   public opened: boolean = false
   public isNew: boolean = false;
-  public selectedValue: Array<Column> = [{ field: "ProductName", title: 'Product name' }, { field: "ProductID", title: 'Product id' }]
   public form: FormGroup;
   public data: View = {
     id: 0,
