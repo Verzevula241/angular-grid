@@ -1,6 +1,7 @@
 import { BehaviorSubject } from "rxjs";
 import { views } from "../data/views";
 import { Column } from "../interfaces/column.interface";
+import { Sort } from "../interfaces/sort.interface";
 import { View } from "../interfaces/view.interface";
 
 const CREATE_ACTION = 'create';
@@ -22,12 +23,12 @@ export class EditService extends BehaviorSubject<any[]>{
         return this.data = data
     }
 
-    public save(data: any, isNew?: boolean) {
+    public save(view: any, isNew?: boolean) {
         const action = isNew ? CREATE_ACTION : UPDATE_ACTION;
 
         switch(action){
             case(UPDATE_ACTION):
-            const updatedItems = this.data.map(el => el.id === data.id ? data : el)
+            const updatedItems = this.data.map(el => el.id === view.id ? view : el)
             this.data = updatedItems
             localStorage.setItem('views',JSON.stringify(this.data))
         }
@@ -46,6 +47,13 @@ export class EditService extends BehaviorSubject<any[]>{
     public remove(data: any){
         let updatedItems: View[] = []
         this.data.map((el,index) => el.id === data.id ? this.data.splice(index,1) : el)
+        updatedItems = this.data
+        updatedItems.length === 0 ? localStorage.removeItem('views'):localStorage.setItem('views',JSON.stringify(updatedItems))
+        
+    }
+    public removeSort(data: any,sort:Sort){
+        let updatedItems: View[] = []
+        this.data.map((el,index) => el.id === data.id ? el.sort = data.sort : el)
         updatedItems = this.data
         updatedItems.length === 0 ? localStorage.removeItem('views'):localStorage.setItem('views',JSON.stringify(updatedItems))
         

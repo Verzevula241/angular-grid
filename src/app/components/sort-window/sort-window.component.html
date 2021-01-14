@@ -1,0 +1,29 @@
+<kendo-dialog title="add Sorting" *ngIf="opened" (close)="closeForm()" [minWidth]="250" [width]="650" >
+    <form novalidate [formGroup]="formGroup">
+        <kendo-grid [data]="gridData" [height]="250" (add)="addHandler($event)" (save)="saveHandler($event)" (remove)="removeHandler($event)">
+            <ng-template kendoGridToolbarTemplate>
+                <button kendoGridAddCommand>Add new</button>
+                <button kendoGridSaveCommand>Save</button>
+            </ng-template>
+            <kendo-grid-column field="field" title="field">
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem">
+                    <kendo-combobox [formControlName]="'Field'" [data]="fields" textField="title" valueField="field" [valuePrimitive]="true">
+                    </kendo-combobox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="dir" title="dir">
+                <ng-template kendoGridEditTemplate let-dataItem="dataItem">
+                    <kendo-combobox [formControlName]="'dir'" [data]="comboDir" [valuePrimitive]="true">
+                    </kendo-combobox>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-command-column title="command" [width]="200">
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <button kendoGridSaveCommand [disabled]="formGroup.invalid" type="button">Update</button>
+                    <button kendoGridRemoveCommand>Remove</button>
+                </ng-template>
+            </kendo-grid-command-column>
+        </kendo-grid>
+    </form>
+
+</kendo-dialog>

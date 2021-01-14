@@ -4,6 +4,13 @@
 
     </ng-template>
     <kendo-grid-column *ngFor="let col of column" [field]="col.field!" [title]="col.title!"></kendo-grid-column>
+    <kendo-grid-command-column field="sort" title="sort" [width]="200">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <button kendoButton [look]="'clear'" (click)="openWin(dataItem)">
+                <span class="k-icon k-i-track-changes-enable"></span>
+            </button>
+        </ng-template>
+    </kendo-grid-command-column>
     <kendo-grid-command-column title="Columns">
         <ng-template kendoGridCellTemplate let-isNew="isNew">
             <button kendoGridEditCommand [primary]="true">Edit</button>
@@ -17,20 +24,22 @@
         <kendo-window-titlebar>
             <button kendoWindowCloseAction></button>
         </kendo-window-titlebar>
-        <form class="k-form" [formGroup]="form" >
+        <form class="k-form" [formGroup]="form">
             <fieldset>
                 <legend>User Details</legend>
 
                 <label class="k-form-field">
                     <input kendoTextBox class="k-textbox" [formControlName]="'name'" placeholder="View name" />
                 </label>
-                
+
                 <label class="k-form-field">
-                    <kendo-numerictextbox   [formControlName]="'pageSize'"  placeholder="Page size" [format]="'#'" [min]="1" [max]="20" round = true [autoCorrect]=false>
+                    <kendo-numerictextbox [formControlName]="'pageSize'" placeholder="Page size" [format]="'#'"
+                        [min]="1" [max]="20" round=true [autoCorrect]=false>
                     </kendo-numerictextbox>
                 </label>
                 <label class="k-form-field">
-                    <kendo-multiselect  [formControlName]="'column'" placeholder="Select Fields" [data]="prodColumns" valueField=field textField=title ></kendo-multiselect>
+                    <kendo-multiselect [formControlName]="'column'" placeholder="Select Fields" [data]="prodColumns"
+                        valueField=field textField=title></kendo-multiselect>
                 </label>
             </fieldset>
 
@@ -39,7 +48,11 @@
             </div>
         </form>
     </kendo-window>
-    <app-edit-form [model]="editDataItem" [isNew]="isNew" *ngIf="activeEdit"
-          (cancel)="cancelHandler()">
-      </app-edit-form>
+    <app-edit-form [model]="editDataItem" [isNew]="isNew" *ngIf="activeEdit" (cancel)="cancelHandler()">
+    </app-edit-form>
+
+    <app-sort-window [model]="editDataItem" [open]="openedSort" (cancel)="openWin(editDataItem)">
+    </app-sort-window>
+
+
 </div>

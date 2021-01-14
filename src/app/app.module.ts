@@ -14,6 +14,7 @@ import { WindowModule } from '@progress/kendo-angular-dialog';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { EditFormComponent } from './components/edit-form/edit-form.component';
 import { DialogModule } from '@progress/kendo-angular-dialog';
+import { SortWindowComponent } from './components/sort-window/sort-window.component';
 
 
 
@@ -23,6 +24,7 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
     EmployeesGridComponent,
     ViewsGridComponent,
     EditFormComponent,
+    SortWindowComponent,
     
   ],
   imports: [

@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { Column } from '../../interfaces/column.interface';
 import { View } from '../../interfaces/view.interface';
-import { productColumns } from '../../data/product.columns'
+// import { productColumns } from '../../data/product.columns'
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { EditEvent, GridDataResult } from '@progress/kendo-angular-grid';
 import { EditService } from 'src/app/service/editView.service';
+
 
 
 const setDefaulValue = (product: Array<Column>): Column[] => {
@@ -32,22 +33,37 @@ export class ViewsGridComponent implements OnInit {
   @Input() public set views(data: View[]) {
     //   this.editForm.reset(column);
     this.view = data;
-
+    
   }
 
+  @Input() public set Column(product: Array<Object>) {
+    let columns = () =>{
+      let all: Array<Column> = []
+      if(product){
+        Object.keys(product[0]).forEach(x => all.push({field: x, title: x}))
+      }
+      
+      return all
+  } 
+  this.productColumns = columns()
+  }
   private view: View[] = []
   private editService: EditService = new EditService;
   public gridView: GridDataResult = { data: [], total: 0 };
   public activeEdit: boolean = false
   public column: Array<Column>
+
+  public productColumns: Array<Column> = []
+
   public editDataItem: View = {
     id: 0,
     name: '',
     pageSize: 0,
     column: []
   };
-  public prodColumns: Array<Column>
+  public prodColumns: Array<Column> = []
   public opened: boolean = false
+  public openedSort: boolean = false
   public isNew: boolean = false;
   public form: FormGroup;
   public data: View = {
@@ -62,7 +78,6 @@ export class ViewsGridComponent implements OnInit {
     // this.gridView = {data: getLocalViews(this.views),total:0}
     this.column = [{ field: 'id', title: 'View id' }, { field: 'name', title: 'View Name' }, { field: 'pageSize', title: 'Page size' }]
     // this.productColumns = productColumns
-    this.prodColumns = productColumns
     this.form = new FormGroup({
       name: new FormControl(this.data.name, [Validators.required]),
       pageSize: new FormControl(this.data.pageSize, [Validators.required]),
@@ -72,7 +87,13 @@ export class ViewsGridComponent implements OnInit {
 
   public open() {
     this.form.reset();
+    this.prodColumns = this.productColumns
     this.opened = !this.opened;
+  }
+
+  public openWin(e:View) {
+    this.editDataItem = e;
+    this.openedSort = !this.openedSort;
   }
 
   public submitForm(): void {

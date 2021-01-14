@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { products } from '../../data/produts';
+// import { products } from '../../data/produts';
 import { State, process } from '@progress/kendo-data-query';
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
@@ -24,9 +24,11 @@ export class EmployeesGridComponent implements OnInit {
 
   @Input() public set views(product: View[]) {
     this.boxViews = this.editService.getLocalViews(product)
+    
   }
-
-  @Input() data !: Array<Object>
+  @Input() public set data(product: Array<Object>) {
+    this.gridData = product
+  }
   private editService: EditService = new EditService;
   public multiple = false;
   public boxViews: View[] = []
@@ -35,13 +37,10 @@ export class EmployeesGridComponent implements OnInit {
   public bindingType: number = getSessionId()
   public allowUnsort = true;
   public columns: Array<Column>;
-  public gridData: any[] = products;
+  public gridData: any[] = [];
   public gridView: GridDataResult;
   public sort: SortDescriptor[] = [
-    {
-      field: 'ProductID',
-      dir: 'asc'
-    }
+   
   ];
 
 
@@ -77,12 +76,16 @@ export class EmployeesGridComponent implements OnInit {
     }
   }
   private loadView(item: number): void {
+    this.sort = []
     if (typeof item === 'string') { item = +item }
     let table = this.boxViews.find(x => x.id === item);
     if (!table || table === undefined) { 
       this.bindingType = -1
       return this.loadView(this.bindingType) 
     } //добавить ошибку
+    if(table.sort){
+      this.sort = table.sort
+    }
     this.columns = table.column
     this.pageSize = table.pageSize
     if (this.columns) {
